@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: vigilant-ai
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/vigilant_db}
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  ai:
+    openai:
+      base-url: https://api.groq.com/openai
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: ${AI_MODEL:llama3-8b-8192}
+          temperature: ${AI_TEMPERATURE:0.2}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+ 

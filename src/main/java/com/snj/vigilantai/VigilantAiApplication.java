@@ -1,4 +1,4 @@
-package com.snj.vigilant_ai;
+package com.snj.vigilantai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

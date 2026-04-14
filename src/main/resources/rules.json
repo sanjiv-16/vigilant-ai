@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SONAR-106",
+    "description": "Standard outputs should not be used directly to log anything.",
+    "pattern": "System\\.(out|err)\\.print(ln)?\\(",
+    "severity": "LOW",
+    "suggestion": "Use a proper logging framework (e.g., SLF4J log.info(), log.error()).",
+    "fatal": false
+  },
+  {
+    "id": "SONAR-002",
+    "description": "Passwords and secrets should be stored securely (in memory).",
+    "pattern": "String\\s+(?i)(password|secret|token|key)\\s*=",
+    "severity": "HIGH",
+    "suggestion": "Use char[] or byte[] for sensitive data to avoid JVM String Pool retention.",
+    "fatal": true
+  },
+  {
+    "id": "SONAR-1148",
+    "description": "Exceptions should not be ignored. Empty catch blocks hide errors.",
+    "pattern": "catch\\s*\\([^)]+\\)\\s*\\{\\s*\\}",
+    "severity": "MEDIUM",
+    "suggestion": "Either handle the exception, log it, or at least add a comment explaining why it is ignored.",
+    "fatal": false
+  },
+  {
+    "id": "SONAR-4973",
+    "description": "Strings should not be compared using '==' or '!='.",
+    "pattern": "([a-zA-Z0-9_]+\\s*(==|!=)\\s*\"[^\"]*\")|(\"[^\"]*\"\\s*(==|!=)\\s*[a-zA-Z0-9_]+)",
+    "severity": "HIGH",
+    "suggestion": "Use the .equals() method to compare object values, not memory references.",
+    "fatal": true
+  },
+  {
+    "id": "SONAR-1143",
+    "description": "Return statements should not be used in finally blocks.",
+    "pattern": "finally\\s*\\{[^}]*return\\s+[^;]+;[^}]*\\}",
+    "severity": "HIGH",
+    "suggestion": "A return in a finally block suppresses unhandled exceptions thrown in the try or catch block.",
+    "fatal": true
+  },
+  {
+    "id": "SONAR-112",
+    "description": "Generic exceptions like 'Throwable', 'Exception', or 'Error' should not be caught.",
+    "pattern": "catch\\s*\\(\\s*(Exception|Throwable|Error)\\s+[a-zA-Z0-9_]+\\s*\\)",
+    "severity": "MEDIUM",
+    "suggestion": "Catch the most specific exception possible to avoid masking fatal system errors (like OutOfMemoryError).",
+    "fatal": false
+  },
+  {
+    "id": "SONAR-114",
+    "description": "Avoid using Thread.sleep() in enterprise/Spring code.",
+    "pattern": "Thread\\.sleep\\(",
+    "severity": "MEDIUM",
+    "suggestion": "Thread.sleep() blocks the current thread. In Spring, use @Async, Schedulers, or Reactive programming instead.",
+    "fatal": false
+  },
+  {
+    "id": "SEC-AWS-KEY",
+    "description": "Hardcoded AWS Access Keys detected.",
+    "pattern": "AKIA[0-9A-Z]{16}",
+    "severity": "HIGH",
+    "suggestion": "Never hardcode cloud credentials. Use environment variables or AWS Secrets Manager.",
+    "fatal": true
+  },
+  {
+    "id": "SONAR-1166",
+    "description": "Exception handlers should preserve the original exception.",
+    "pattern": "catch\\s*\\([^)]+\\)\\s*\\{[^}]*throw\\s+new\\s+[A-Za-z0-9_]+\\(\"[^\"]*\"\\)\\s*;",
+    "severity": "MEDIUM",
+    "suggestion": "When throwing a new exception in a catch block, pass the original exception as the cause (e.g., throw new CustomException(\"Error\", e)).",
+    "fatal": false
+  }
+]

@@ -1,9 +1,35 @@
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: vigilant-ai-db
     ports:
-      - '5432'
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  api:
+    build: .
+    container_name: vigilant-ai-api
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_MODEL=${AI_MODEL}
+      - AI_TEMPERATURE=${AI_TEMPERATURE}
+    depends_on:
+      db:
+        condition: service_healthy 
+
+volumes:
+  pgdata:
